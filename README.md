@@ -1,23 +1,30 @@
-# Large Laravel  - how to build large and maintainable projects with Laravel framework
+# Laravel Porto - how to build large and maintainable projects with Laravel framework
 
-## Welcome to Large Laravel
+## Credit
+This repository was originally forked from [Stasyanko's](https://github.com/stasyanko/) [Large Laravel](https://github.com/stasyanko/laravel-large-project.git).
 
-- [Introduction](#Introduction)
-	- [Goals of the project](#Goals)
-- [Installation guide](#Installation-Guide)
-- [Main components and ideas](#Main-Components-And-Ideas)
-    - [Design patterns used for the project](#Design-Patterns-Used)
-    - [Actions](#Actions)
-    - [Subactions](#Subactions)
-    - [Interaction with database](#Interaction-With-Database)
-    - [Collections of DTOs and typed collections](#Collections-Of-DTOs)
-    - [Entity relations](#Entity-Relations)
-    - [Decorators](#Decorators)
-    - [API resources](#API-Resources)
-    - [View composers](#View-Composers)
-- [Laravel artisan commands](#Laravel-Artisan-Commands)
-    - [Seeding](#Seeding)
-- [TODO](#Todo)
+
+## Welcome to Laravel Porto
+
+- [Laravel Porto - how to build large and maintainable projects with Laravel framework](#laravel-porto---how-to-build-large-and-maintainable-projects-with-laravel-framework)
+  - [Credit](#credit)
+  - [Welcome to Laravel Porto](#welcome-to-laravel-porto)
+- [Introduction](#introduction)
+  - [Goals of the project](#goals-of-the-project)
+- [Installation guide](#installation-guide)
+- [Main Components & Ideas](#main-components--ideas)
+  - [Design patterns used for the project](#design-patterns-used-for-the-project)
+  - [Actions](#actions)
+  - [Subactions](#subactions)
+  - [Interaction with database](#interaction-with-database)
+  - [Collections of DTOs and typed collections](#collections-of-dtos-and-typed-collections)
+  - [Entity relations](#entity-relations)
+  - [Decorators](#decorators)
+  - [API resources](#api-resources)
+  - [View composers](#view-composers)
+- [Laravel artisan commands](#laravel-artisan-commands)
+  - [Seeding](#seeding)
+- [TODO](#todo)
 
 <a id="Introduction"></a>
 # Introduction
@@ -39,33 +46,33 @@ Goals of this project include:
  - use as few magic methods as possible, even better to remove them at all
  - if possible, make code independent on a framework
  - not to use Eloquent relationships, as they make code hard to refactor and maintain
- 
+
  <a id="Installation-Guide"></a>
 # Installation guide
-For running the project you must have PHP 7.4.2.
+For running the project you must have PHP 8.0.2.
 To run the project, create an empty database.
 Then just do the following:
 
-    git clone https://github.com/stasyanko/laravel-large-project.git
-    cd laravel-large-project
-	cp .env.example .env
-	
+    git clone https://github.com/Vardkin/laravel-porto-project.git
+    cd laravel-porto-project
+    cp .env.example .env
+
 
 In .env file type your database credentials in these lines:
 
-    DB_CONNECTION=mysql  
-    DB_HOST=127.0.0.1  
-    DB_PORT=3306  
-    DB_DATABASE=laravel  
-    DB_USERNAME=root  
+    DB_CONNECTION=mysql
+    DB_HOST=127.0.0.1
+    DB_PORT=3306
+    DB_DATABASE=laravel
+    DB_USERNAME=root
     DB_PASSWORD=
 
 After that, run these commands from terminal:
-		
+
     composer install
     php artisan key:generate
     php artisan migrate
-	    
+
  <a id="Main-Components-And-Ideas"></a>
 # Main Components & Ideas
 
@@ -73,7 +80,7 @@ In this part main components, ideas and design principles are explained in detai
 
 <a id="Design-Patterns-Used"></a>
 ## Design patterns used for the project
- 
+
  In this project DTOs are used for transfering data between objects and thanks to PHP 7.4 typed properties we can construct DTOs without annotations. Thanks to the author of this [article](https://dev.to/zubairmohsin33/data-transfer-object-dto-in-laravel-with-php7-4-typed-properties-2hi9) and spatie for their [package](https://github.com/spatie/data-transfer-object).
 
  The following design patterns were used to build this project:
@@ -97,8 +104,8 @@ Subactions are used to extract business logic that needs to be reused in other c
 ## Interaction with database
 
 Eloquent does not suit for large scale projects as it uses lots of magic under the hood.
-In order to scale your codebase, you need to either wrap Eloquent in some abstraction, or replace it with something like Doctrine ORM. 
-In the current project Eloquent is wrapped in a class called Proxy, e.g. BookEloquentProxy. 
+In order to scale your codebase, you need to either wrap Eloquent in some abstraction, or replace it with something like Doctrine ORM.
+In the current project Eloquent is wrapped in a class called Proxy, e.g. BookEloquentProxy.
 Often developers call it Repository when wrapping Eloquent with something, but it is a mistake, as Repository assumes the following according to Edward Hieatt and Rob Mee:
 
 *Mediates between the domain and data mapping layers using a collection-like interface for accessing domain objects.*
@@ -113,35 +120,35 @@ So, it would be better better to call this abstraction Proxy. According to Wikip
 
 After we get data from some EloquentProxy, for example BookEloquentProxy, we need to convert this data to collection of DTOs:
 
-    public function execute(PaginateRequestInterface $paginateRequest): BookCollection  
-    {  
-        $bookCollection = [];  
-        $bookList = $this->bookEloquentProxy->findAll(  
-            [],  
-            $paginateRequest->getLimit(),  
-            $paginateRequest->getOffset()  
-        );  
-        foreach ($bookList as $book) {  
-            $bookCollection[] = new BookDTO($book);  
-        }  
-        return new BookCollection(...$bookCollection);  
+    public function execute(PaginateRequestInterface $paginateRequest): BookCollection
+    {
+        $bookCollection = [];
+        $bookList = $this->bookEloquentProxy->findAll(
+            [],
+            $paginateRequest->getLimit(),
+            $paginateRequest->getOffset()
+        );
+        foreach ($bookList as $book) {
+            $bookCollection[] = new BookDTO($book);
+        }
+        return new BookCollection(...$bookCollection);
     }
 
 This approach is good for two reasons: we have a typed collection and we can refactor easily both every entity of a collection, and a collection itself. Also, we can typehint BookCollection when passing it as a param:
 
-    public function fromCollection(BookCollection $bookCollection): array  
-    {  
-        $mappedCollection = [];  
+    public function fromCollection(BookCollection $bookCollection): array
+    {
+        $mappedCollection = [];
 
-        foreach ($bookCollection as $bookDTO) {  
-            $mappedCollection[] = [  
-                // any IDE will provide autocomplete here 
+        foreach ($bookCollection as $bookDTO) {
+            $mappedCollection[] = [
+                // any IDE will provide autocomplete here
                 // without any additional packages like IDE helper for Laravel
-                'id' => $bookDTO->id,  
-                'title' => $bookDTO->title,  
-            ]; 
-        }  
-        return $this->wrapResponse($mappedCollection);  
+                'id' => $bookDTO->id,
+                'title' => $bookDTO->title,
+            ];
+        }
+        return $this->wrapResponse($mappedCollection);
     }
 
 Also, you get really independent on Eloquent, as you don't use generic Eloquent collections, instead you use collections of DTOs and you can easily replace your data source with any other ORM, API etc. without breaking your code.
@@ -154,9 +161,9 @@ Eloquent relations should not be used in a large project, as they make your code
     class BookDTO extends DataTransferObject
     {
       public int $id;
-      
+
       // .... some other properties
-      
+
       // these are comments related to BookDTO
       public CommentCollection $comments
     }
@@ -168,14 +175,14 @@ Eloquent relations should not be used in a large project, as they make your code
 
 Decorators are really great, as they allow you to extend an object's behaviour in a really OOP way. What would you do if you nedded to log the value of your action, e.g. list of books? Well, we often see this recommendation:
 
-    public function execute(PaginateRequestInterface $paginateRequest): BookCollection  
-    {  
-       $bookCollection = [];  
+    public function execute(PaginateRequestInterface $paginateRequest): BookCollection
+    {
+       $bookCollection = [];
        // some code here
 
        Log::info('get ' . count($bookCollection) . 'books');
 
-       return new BookCollection(...$bookCollection);  
+       return new BookCollection(...$bookCollection);
     }
 
 But what did we do right now? We broke here open closed principle. Our code must be open for extension, but closed for modification. By inserting Log::info() to execute() method, we modified it, instead of extending. Also, our object now does more than one thing: it fectches books and logs the result.
@@ -183,13 +190,13 @@ But what did we do right now? We broke here open closed principle. Our code must
 How can we do it in a OOP way? Decorators to the rescue!
 In a Laravel service container we decorate our action before binding it to our interface:
 
-    public function register()  
-    {  
-      $bookListAction = new GetBookListAction(new BookEloquentProxy());  
-      $bookListActionLogged = new GetBookListActionLogger($bookListAction);  
-      
-      $this->app->bind(GetBookListActionInterface::class, function ($app) use($bookListActionLogged) {  
-        return $bookListActionLogged;  
+    public function register()
+    {
+      $bookListAction = new GetBookListAction(new BookEloquentProxy());
+      $bookListActionLogged = new GetBookListActionLogger($bookListAction);
+
+      $this->app->bind(GetBookListActionInterface::class, function ($app) use($bookListActionLogged) {
+        return $bookListActionLogged;
       });
      }
 As GetBookListActionLogger implements GetBookListActionInterface, it can be easily bound to this in a service container and in this case we extended GetBookListAction instead of modifying it. We can add as many decorators as we like and everything will work fine.
