@@ -171,16 +171,16 @@ return [
         /*
          * Application Service Providers...
          */
-        LargeLaravel\Ship\Providers\AppServiceProvider::class,
-        LargeLaravel\Ship\Providers\AuthServiceProvider::class,
+        LaravelPorto\Ship\Providers\AppServiceProvider::class,
+        LaravelPorto\Ship\Providers\AuthServiceProvider::class,
         // App\Providers\BroadcastServiceProvider::class,
-        LargeLaravel\Ship\Providers\EventServiceProvider::class,
-        LargeLaravel\Ship\Providers\RouteServiceProvider::class,
+        LaravelPorto\Ship\Providers\EventServiceProvider::class,
+        LaravelPorto\Ship\Providers\RouteServiceProvider::class,
 
         /*
          * Custom Service Providers...
          */
-        LargeLaravel\Containers\Book\Providers\BookServiceProvider::class,
+        LaravelPorto\Containers\Book\Providers\BookServiceProvider::class,
     ],
 
     /*

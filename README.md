@@ -208,11 +208,11 @@ API resources are used to transform API responses. Sometimes, you need to conver
 
     <?php
 
-    namespace LargeLaravel\Containers\Book\UI\API\Resources;
+    namespace LaravelPorto\Containers\Book\UI\API\Resources;
 
-    use LargeLaravel\Containers\Book\Collections\BookCollection;
-    use LargeLaravel\Containers\Book\UI\API\Resources\Interfaces\BookListResourceInterface;
-    use LargeLaravel\Ship\Abstracts\Resources\ApiResource;
+    use LaravelPorto\Containers\Book\Collections\BookCollection;
+    use LaravelPorto\Containers\Book\UI\API\Resources\Interfaces\BookListResourceInterface;
+    use LaravelPorto\Ship\Abstracts\Resources\ApiResource;
 
 
     class BookListResource extends ApiResource implements BookListResourceInterface
@@ -246,7 +246,7 @@ Some classes of Laravel in the project are moved to Ship folder and some artisan
 
 To seed database run db:seed like this with option --class:
 
-    php artisan db:seed --class '\LargeLaravel\Ship\Seeders\DatabaseSeeder'
+    php artisan db:seed --class '\LaravelPorto\Ship\Seeders\DatabaseSeeder'
 
 Your custom seeders must be in the  Data folder of the proper container, e.g. Containers/User/Data/Seeders/UserSeeder.
 
