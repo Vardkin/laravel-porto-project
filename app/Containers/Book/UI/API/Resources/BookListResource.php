@@ -8,17 +8,17 @@ use LaravelPorto\Ship\Abstracts\Resources\ApiResource;
 
 class BookListResource extends ApiResource implements BookListResourceInterface
 {
-    public function fromCollection(BookCollection $bookCollection): array
-    {
-        $mappedCollection = [];
+  public function fromCollection(BookCollection $bookCollection): array
+  {
+    $mappedCollection = [];
 
-        foreach ($bookCollection as $bookDTO) {
-            $mappedCollection[] = [
-                'id' => $bookDTO->id,
-                'title' => $bookDTO->title,
-            ];
-        }
-
-        return $this->wrapResponse($mappedCollection);
+    foreach ($bookCollection as $bookDTO) {
+      $mappedCollection[] = [
+        'id' => $bookDTO->id,
+        'title' => $bookDTO->title,
+      ];
     }
+
+    return $this->wrapResponse($mappedCollection);
+  }
 }

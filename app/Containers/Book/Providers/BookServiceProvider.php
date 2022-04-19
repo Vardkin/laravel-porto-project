@@ -6,7 +6,7 @@ use Illuminate\Support\ServiceProvider;
 use LaravelPorto\Containers\Book\Actions\Decorators\GetBookListActionLogger;
 use LaravelPorto\Containers\Book\Actions\GetBookListAction;
 use LaravelPorto\Containers\Book\Proxies\BookEloquentProxy;
-use LaravelPorto\Containers\Book\Subactions\Interfaces\GetBookListActionInterface;
+use LaravelPorto\Containers\Book\Actions\Interfaces\GetBookListActionInterface;
 
 class BookServiceProvider extends ServiceProvider
 {

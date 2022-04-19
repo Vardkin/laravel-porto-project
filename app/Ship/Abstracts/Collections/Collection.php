@@ -2,8 +2,8 @@
 
 namespace LaravelPorto\Ship\Abstracts\Collections;
 
-use Spatie\DataTransferObject\DataTransferObjectCollection;
+use Illuminate\Support\Collection as LaravelCollection;
 
-abstract class Collection extends DataTransferObjectCollection
+abstract class Collection extends LaravelCollection
 {
 }

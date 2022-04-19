@@ -34,6 +34,6 @@ class GetBookListAction implements GetBookListActionInterface
             $bookCollection[] = new BookDTO($book);
         }
 
-        return new BookCollection(...$bookCollection);
+        return new BookCollection($bookCollection);
     }
 }

@@ -2,7 +2,7 @@
 
 namespace LaravelPorto\Containers\Book\UI\API\Controllers;
 
-use LaravelPorto\Containers\Book\Subactions\Interfaces\GetBookListActionInterface;
+use LaravelPorto\Containers\Book\Actions\Interfaces\GetBookListActionInterface;
 use LaravelPorto\Containers\Book\UI\API\Resources\BookListResource;
 use LaravelPorto\Ship\Abstracts\Controllers\Controller;
 use LaravelPorto\Ship\Http\Requests\API\PaginateRequest;
